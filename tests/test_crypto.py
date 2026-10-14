@@ -1,48 +1,41 @@
 from src.crypto_ops import (
+    mldsa_sign_verify,
+    mlkem_exchange,
     generate_rsa_keypair,
-    generate_ecdsa_keypair,
-    generate_ed25519_keypair,
-    generate_x25519_keypair,
+    ed25519_sign_verify,
     sha256_hash,
     sha3_256_hash,
 )
 
 
-def test_rsa_keypair():
-    priv, pub = generate_rsa_keypair()
-
-    assert priv is not None
-    assert pub is not None
+def test_mldsa():
+    sig = mldsa_sign_verify()
+    assert len(sig) > 0
 
 
-def test_ecdsa_keypair():
-    priv, pub = generate_ecdsa_keypair()
-
-    assert priv is not None
-    assert pub is not None
+def test_mlkem():
+    secret = mlkem_exchange()
+    assert len(secret) > 0
 
 
-def test_ed25519_keypair():
-    priv, pub = generate_ed25519_keypair()
+def test_rsa():
+    private_key, public_key = generate_rsa_keypair()
 
-    assert priv is not None
-    assert pub is not None
+    assert private_key is not None
+    assert public_key is not None
 
 
-def test_x25519_keypair():
-    priv, pub = generate_x25519_keypair()
+def test_ed25519():
+    signature = ed25519_sign_verify()
 
-    assert priv is not None
-    assert pub is not None
+    assert len(signature) > 0
 
 
 def test_sha256():
-    digest = sha256_hash(b"hello world")
+    digest = sha256_hash(b"hello")
+    assert len(digest) == 64
 
-    assert len(digest) == 32
 
-
-def test_sha3_256():
-    digest = sha3_256_hash(b"hello world")
-
-    assert len(digest) == 32
+def test_sha3():
+    digest = sha3_256_hash(b"hello")
+    assert len(digest) == 64
